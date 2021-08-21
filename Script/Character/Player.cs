@@ -117,10 +117,7 @@ public class Player : MonoBehaviour
             manager.Action(scanObject); // 플레이어가 I키를 눌렀을 경우 GameManager의 Action함수 호출 
         }
 
-        if (Input.GetKeyDown(KeyCode.P)) //플레이어가 P키를 입력했을 경우
-        {
-            Panel3.SetActive(true); //인벤토리 캔버스를 Panel3으로 설정하고 SetActive를 이용하여 팝업 
-        }
+       
     }
 
     void FixedUpdate()
