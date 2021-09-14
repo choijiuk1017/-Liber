@@ -11,17 +11,25 @@ public class Player : MonoBehaviour
     public GameObject player; //플레이어
     public GameObject Panel; //게임 오버 캔버스
     public GameObject Panel2; //ESC 캔버스 
-    public GameObject Panel3; //인벤토리 캔버스
     public GameManager manager; //GameManager
 
     GameObject scanObject; //NPC와 같은 오브젝트
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
     Animator animator;
+    [SerializeField]
+    Transform pos;
+    [SerializeField]
+    float checkRadius;
+    [SerializeField]
+    LayerMask islayer;
+
+
+    bool isGround;
 
     public int maxHealth = 3; //최대 체력은 3으로 설정
 
-    int health = 3; 
+    public int health = 3; 
 
     public float maxSpeed;
     public float JumpPower;
@@ -51,10 +59,10 @@ public class Player : MonoBehaviour
     void Update()
     {
         //jump
-        if (Input.GetButtonDown("Jump")) //jump버튼을 눌렀을 경우
+        isGround = Physics2D.OverlapCircle(pos.position, checkRadius,islayer);
+        if (isGround = true && Input.GetKeyDown(KeyCode.Space))//jump버튼을 눌렀을 경우
         {
            rigid.AddForce(Vector2.up * JumpPower, ForceMode2D.Impulse); //점프
-       
         }
 
         //stop Speed
@@ -142,7 +150,7 @@ public class Player : MonoBehaviour
         }
 
         //NPC 조사 기능
-        Debug.DrawRay(rigid.position, dirVec * 0.7f, new Color(0,1,0)); //바라보는 방향으로 Ray 출력, 게임에서 잘뜨는지 확인하기 위해 초록색으로 함
+        Debug.DrawRay(rigid.position, dirVec * 0.7f, new Color(0,0,0,0)); //바라보는 방향으로 Ray 출력, 게임에서 잘뜨는지 확인하기 위해 초록색으로 함
         RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, dirVec, 0.7f, LayerMask.GetMask("NPC")); //Ray에 NPC가 닿는지 확인
 
         if(rayHit.collider != null) //닿으면

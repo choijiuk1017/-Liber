@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Inventory : MonoBehaviour
 {
     #region SingleTon
@@ -14,6 +15,7 @@ public class Inventory : MonoBehaviour
             return;
         }
         instance = this;
+
     }
     #endregion  
 
@@ -29,15 +31,17 @@ public class Inventory : MonoBehaviour
 
     private int slotCnt;
 
+   
+
     public int SlotCnt //슬롯 칸 개수 설정
     {
         get => slotCnt; //처음 슬롯 칸의 개수인 3을 받음
         set
         {
             slotCnt = value; //슬롯 칸의 개수를 변경할 수 있도록 함
-            onSlotCountChage.Invoke(slotCnt); 
+            onSlotCountChage.Invoke(slotCnt);
         }
-    }
+    }  
 
     // Start is called before the first frame update
     void Start()

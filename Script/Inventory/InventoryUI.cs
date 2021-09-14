@@ -12,7 +12,7 @@ public class InventoryUI : MonoBehaviour
     public Transform slotHolder;
     Inventory inven;
 
-    bool activeInventory = false; //인벤토리의 실행 여부
+    //bool activeInventory = false; //인벤토리의 실행 여부
 
 
     // Start is called before the first frame update
@@ -43,12 +43,12 @@ public class InventoryUI : MonoBehaviour
     void Update()
     {
         
-           
+
     }
 
     public void AddSlot()
     {
-        inven.SlotCnt = inven.SlotCnt+4; //인벤토리의 슬롯 칸의 수가 늘어나도록 하는 함수
+        inven.SlotCnt = inven.SlotCnt+3; //인벤토리의 슬롯 칸의 수가 늘어나도록 하는 함수
     }
 
     void RedrawSlotUI()

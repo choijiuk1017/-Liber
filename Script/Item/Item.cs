@@ -15,6 +15,8 @@ public class Item
     public string itemName;
     public Sprite itemImage;
     public List<ItemEffect> efts;
+    
+    
 
     public bool Use()
     {
