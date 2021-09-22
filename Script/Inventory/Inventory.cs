@@ -39,7 +39,7 @@ public class Inventory : MonoBehaviour
         set
         {
             slotCnt = value; //슬롯 칸의 개수를 변경할 수 있도록 함
-            onSlotCountChage.Invoke(slotCnt);
+           // onSlotCountChage.Invoke(slotCnt);
         }
     }  
 

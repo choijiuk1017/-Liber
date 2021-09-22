@@ -29,10 +29,13 @@ public class Player : MonoBehaviour
 
     public int maxHealth = 3; //최대 체력은 3으로 설정
 
-    public int health = 3; 
+    public int health = 3;
 
+    public float movePower;
     public float maxSpeed;
     public float JumpPower;
+
+    bool isJumping = false;
 
     Vector3 dirVec;
 
@@ -58,12 +61,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //jump
-        isGround = Physics2D.OverlapCircle(pos.position, checkRadius,islayer);
-        if (isGround = true && Input.GetKeyDown(KeyCode.Space))//jump버튼을 눌렀을 경우
+        //점프
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-           rigid.AddForce(Vector2.up * JumpPower, ForceMode2D.Impulse); //점프
+                isJumping = true;   
         }
+        
 
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
@@ -79,11 +82,15 @@ public class Player : MonoBehaviour
         }
 
         //걷기 애니메이션 출력
-        if (rigid.velocity.normalized.x == 0)
+        if (Input.GetAxisRaw("Horizontal")== 0) //플레이어가 움직이지 않으면 애니메이션 출력 x
         {
             animator.SetBool("isWalking", false);
         }
-        else
+        else if(Input.GetAxisRaw("Horizontal") < 0) //플레이어가 움직이면 애니메이션 출력
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else if (Input.GetAxisRaw("Horizontal") > 0)
         {
             animator.SetBool("isWalking", true);
         }
@@ -98,7 +105,6 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (player)
 
         if(Input.GetKeyDown("escape"))//ESC키를 입력시
         {
@@ -130,24 +136,14 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        Move();
+        Jump();
 
         if (health == 0) //Hp가 0이면 움직일 수 없음
             return; 
 
         //플레이어 이동 관련
         float h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal"); //Action함수의 여부를 따지는 것을 이용하여 플레이어가 대화중일 경우 이동이 불가하도록 설정
-
-        //플레이어 이동
-        rigid.AddForce(Vector2.right * h * 10f, ForceMode2D.Impulse); 
-
-        if (rigid.velocity.x > maxSpeed) //속도가 최대 속도보다 클때
-        {
-            rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y); //최대 속도 유지
-        }
-        else if (rigid.velocity.x < maxSpeed*(-1)) //왼쪽 이동시 최대 속도보다 클때
-        {
-            rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y); //최대 속도 유지
-        }
 
         //NPC 조사 기능
         Debug.DrawRay(rigid.position, dirVec * 0.7f, new Color(0,0,0,0)); //바라보는 방향으로 Ray 출력, 게임에서 잘뜨는지 확인하기 위해 초록색으로 함
@@ -192,6 +188,37 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    void Move() //플레이어 이동
+    {
+        Vector3 moveVelocity = Vector3.zero;
+
+        if(Input.GetAxisRaw("Horizontal") < 0)
+        {
+            moveVelocity = Vector3.left;
+        }
+
+        else if (Input.GetAxisRaw("Horizontal") > 0)
+        {
+            moveVelocity = Vector3.right;
+        }
+
+        transform.position += moveVelocity * movePower * Time.deltaTime;
+    }
+
+    void Jump() //플레이어 점프
+    {
+        if (!isJumping)
+            return;
+
+        rigid.velocity = Vector2.zero;
+
+        Vector2 jumpVelocity = new Vector2(0, JumpPower);
+        rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
+
+        isJumping = false;
+    }
+
 
     //피격시 무적 시간
     void OnDamaged()
